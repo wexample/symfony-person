@@ -112,6 +112,17 @@ class Person extends AbstractEntity implements Stringable
         return $this->slug;
     }
 
+    /**
+     * Their address changes with it: what linked to the former one no longer finds
+     * them. Made unique by PersonService.
+     */
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;

@@ -43,6 +43,18 @@ class PersonService
     }
 
     /**
+     * A new name, and the address that goes with it.
+     */
+    public function rename(
+        Person $person,
+        string $displayName
+    ): void {
+        $person
+            ->setDisplayName($displayName)
+            ->setSlug($this->createUniqueSlug($displayName));
+    }
+
+    /**
      * `jean-jaures`, then `jean-jaures-2` for a second one of that name.
      *
      * Read from the database: two people of the same name created in one batch

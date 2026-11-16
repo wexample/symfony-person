@@ -25,6 +25,23 @@ class PersonRepository extends AbstractRepository
         return new Person($displayName, $slug);
     }
 
+    /**
+     * Everyone, by name, one page of them at a time.
+     *
+     * @return list<Person>
+     */
+    public function findByName(
+        int $limit = 50,
+        int $offset = 0
+    ): array {
+        return $this->createQueryBuilder('person')
+            ->orderBy('person.displayName', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneBySlug(string $slug): ?Person
     {
         return $this->findOneBy(['slug' => $slug]);
