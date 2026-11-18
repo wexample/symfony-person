@@ -42,6 +42,31 @@ class PersonRepository extends AbstractRepository
             ->getResult();
     }
 
+    /**
+     * The people whose address holds $fragment — a slug itself, lowercase and
+     * without accents, so « melenchon » finds « Jean-Luc Mélenchon » —, those it
+     * opens first, then by name.
+     *
+     * @return list<Person>
+     */
+    public function findBySlugContaining(
+        string $fragment,
+        int $limit
+    ): array {
+        $escaped = addcslashes($fragment, '%_');
+
+        return $this->createQueryBuilder('person')
+            ->addSelect('CASE WHEN person.slug LIKE :prefix THEN 0 ELSE 1 END AS HIDDEN inside')
+            ->where('person.slug LIKE :fragment')
+            ->setParameter('fragment', '%'.$escaped.'%')
+            ->setParameter('prefix', $escaped.'%')
+            ->orderBy('inside', 'ASC')
+            ->addOrderBy('person.displayName', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneBySlug(string $slug): ?Person
     {
         return $this->findOneBy(['slug' => $slug]);
