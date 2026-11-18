@@ -18,7 +18,8 @@
   "require": {
     "php": ">=8.5",
     "wexample/symfony-helpers": ">=19.1.0",
-    "symfony/string": "^7.4 || ^8.0"
+    "symfony/string": "^7.4 || ^8.0",
+    "wexample/symfony-media": ">=7.0.1"
   },
   "repositories": [
     {

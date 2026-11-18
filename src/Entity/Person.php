@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\HasDateCreatedTrait;
+use Wexample\SymfonyMedia\Entity\Media;
 use Wexample\SymfonyPerson\Repository\PersonRepository;
 
 /**
@@ -55,6 +56,14 @@ class Person extends AbstractEntity implements Stringable
     /**
      * @var Collection<int, PersonIdentifier>
      */
+    /**
+     * Their picture, a media of the library — its credit with it when someone else
+     * took it. Gone with the media.
+     */
+    #[ORM\ManyToOne(targetEntity: Media::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    protected ?Media $portrait = null;
+
     #[ORM\OneToMany(mappedBy: 'person', targetEntity: PersonIdentifier::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $identifiers;
 
@@ -131,6 +140,18 @@ class Person extends AbstractEntity implements Stringable
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPortrait(): ?Media
+    {
+        return $this->portrait;
+    }
+
+    public function setPortrait(?Media $portrait): static
+    {
+        $this->portrait = $portrait;
 
         return $this;
     }

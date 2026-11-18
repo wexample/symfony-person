@@ -1,0 +1,1 @@
+`symfony-person` keeps people as the public knows them — a member of parliament, a minister, an author —, once, however many sources name them: a `Person` has a name, an address of its own (`slug`), a description, a portrait, and one `PersonIdentifier` per source that names them, by which an import finds the same person again instead of creating a second one.

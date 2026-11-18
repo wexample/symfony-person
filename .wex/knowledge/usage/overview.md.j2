@@ -1,0 +1,17 @@
+## Finding or creating
+
+```php
+$person = $this->people->findOrCreateByIdentifier('wikidata', 'Q3052772', 'Emmanuel Macron');
+$person = $this->personRepository->findOneByIdentifier('an', '720430');
+$person = $this->personRepository->findOneBySlug('emmanuel-macron');
+```
+
+`PersonService::findOrCreateByIdentifier()` creates the person with the identifier the first time, with a unique slug (`jean-jaures`, then `jean-jaures-2`); `rename()` gives a new name and the address that goes with it. Nothing is flushed: the caller decides when — two people of the same name created in one batch must be flushed in between, the slugs being read from the database.
+
+## Portrait
+
+```php
+$person->setPortrait($media);   // a symfony-media Media
+```
+
+A media of the library, its credit — author, license, source — with it when someone else took the picture; the relation empties itself when the media is deleted.
