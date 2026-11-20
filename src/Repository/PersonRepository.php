@@ -90,6 +90,17 @@ class PersonRepository extends AbstractRepository
     }
 
     /**
+     * The one person bearing exactly this name: null when no one does, and when
+     * several do — the name alone does not say which.
+     */
+    public function findOneByUniqueName(string $displayName): ?Person
+    {
+        $people = $this->findBy(['displayName' => $displayName], limit: 2);
+
+        return 1 === count($people) ? $people[0] : null;
+    }
+
+    /**
      * @return list<string> the slugs already taken among those starting with $base
      */
     public function findSlugsStartingWith(string $base): array
