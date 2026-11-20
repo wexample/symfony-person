@@ -90,14 +90,24 @@ class PersonRepository extends AbstractRepository
     }
 
     /**
-     * The one person bearing exactly this name: null when no one does, and when
-     * several do — the name alone does not say which.
+     * The people whose slug was made from $base — `jean-jaures`, `jean-jaures-2`… —:
+     * those whose names read the same.
+     *
+     * @return list<Person>
      */
-    public function findOneByUniqueName(string $displayName): ?Person
+    public function findBySlugBase(string $base): array
     {
-        $people = $this->findBy(['displayName' => $displayName], limit: 2);
+        $pattern = '/^'.preg_quote($base, '/').'(-\d+)?$/';
 
-        return 1 === count($people) ? $people[0] : null;
+        return array_values(array_filter(
+            $this->createQueryBuilder('person')
+                ->where('person.slug = :base OR person.slug LIKE :prefix')
+                ->setParameter('base', $base)
+                ->setParameter('prefix', addcslashes($base, '%_').'-%')
+                ->getQuery()
+                ->getResult(),
+            static fn (Person $person): bool => 1 === preg_match($pattern, $person->getSlug())
+        ));
     }
 
     /**

@@ -62,7 +62,7 @@ class PersonService
      */
     public function createUniqueSlug(string $displayName): string
     {
-        $base = $this->slugger->slug($displayName)->lower()->toString() ?: 'person';
+        $base = $this->createSlugBase($displayName);
         $taken = array_flip($this->personRepository->findSlugsStartingWith($base));
 
         if (! isset($taken[$base])) {
@@ -73,5 +73,25 @@ class PersonService
         }
 
         return $base.'-'.$suffix;
+    }
+
+    /**
+     * The people whose name reads as $displayName, accents, case and punctuation
+     * aside — « Eléonore Caroit » for « Éléonore Caroit », « Jean Pierre » for
+     * « Jean-Pierre » —: compared through their slugs. For a source that names
+     * people without identifying them: one namesake is the person it means,
+     * several leave it unsaid. Give the person found the source's own
+     * identifier, so that the next import meets them by it.
+     *
+     * @return list<Person>
+     */
+    public function findNamesakes(string $displayName): array
+    {
+        return $this->personRepository->findBySlugBase($this->createSlugBase($displayName));
+    }
+
+    private function createSlugBase(string $displayName): string
+    {
+        return $this->slugger->slug($displayName)->lower()->toString() ?: 'person';
     }
 }
