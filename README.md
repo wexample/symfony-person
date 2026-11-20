@@ -1,6 +1,6 @@
 # symfony-person
 
-Version: 3.0.0
+Version: 4.0.0
 
 People as the public knows them: one entry per person, however many sources name them, found again by the identifiers those sources give them
 

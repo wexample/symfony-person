@@ -1,7 +1,7 @@
 {
   "name": "wexample/symfony-person",
   "description": "People as the public knows them: one entry per person, however many sources name them, found again by the identifiers those sources give them",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "type": "library",
   "license": "MIT",
   "autoload": {
